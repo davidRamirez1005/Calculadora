@@ -26,18 +26,5 @@ else{
 }
 
 
-// Cargar el documento HTML
-$dom = new DOMDocument();
-$dom->loadHTMLFile('index.html');
-
-// Obtener el elemento con el ID "titulo"
-$titulo = $dom->getElementById('titulo');
-
-// Modificar el contenido del elemento
-$titulo->nodeValue = 'Nuevo título';
-
-// Guardar los cambios en el documento
-$dom->save('index.html');
-
 
 ?>
