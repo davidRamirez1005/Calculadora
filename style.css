@@ -1,0 +1,28 @@
+body{
+    background-color: rgb(240, 253, 252);
+}
+.row{
+    display: flex;
+    justify-content: center;
+    padding: 2%;
+    gap: 1rem;
+    column-gap: 1rem;
+}
+span{
+    margin-bottom: 2vh;
+    cursor: pointer;
+    background-color: rgb(116, 113, 113);
+    display: flex;
+    justify-content: center;
+    color: white;
+    border-radius: 8px
+}
+span:hover{
+    background-color: black;
+    translate: 10px -5px;
+}
+.colum{
+    display: flex;
+    flex-direction: column;
+}
+
