@@ -1,3 +1,9 @@
+<?php
+setcookie("jose","es");
+
+
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -39,6 +45,8 @@
 //   else{
 
 //   }
+
+
 ?>
   <main>
 
@@ -82,6 +90,7 @@
     </div>
 </div>
 </form>
+<div class="pixel"></div>
   </main>
   <footer>
     <!-- place footer here -->
