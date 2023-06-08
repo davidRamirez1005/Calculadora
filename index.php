@@ -25,22 +25,15 @@ setcookie("jose","es");
   </header>
   <?php
 session_start();
-
-$botones = [1, 2, 3, '+', 4, 5, 6, '-', 7, 8, 9, '*', 'c', 0, '/', '=', '←'];
-$numero = '';
-if (isset($_POST['numero']) && in_array($_POST['numero'], $botones)) {
-   $numero = $_POST['numero'];
-}
-
+$numero = $_POST['numero'];
 $resultado = isset($_SESSION['resultado']) ? $_SESSION['resultado'] : '';
-
 $mostrar = $resultado . $numero;
 if ($numero == 'c') {
    $mostrar = '';
    $_SESSION['resultado'] = '';
-} elseif ($numero == '=' && preg_match('~^\d*\.?\d+(?:[*/+-]\d*\.?\d+)*$~', $resultado)) {
-   if (preg_match('~\/0~', $resultado)) {
-      $mostrar = 'Expresión no válida';
+} else if ($numero == '=' && preg_match('~^\d*\.?\d+(?:[*/+-]\d*\.?\d+)*$~', $resultado)) {
+  if (preg_match('~\/0~', $resultado)) {
+      $mostrar = 'Expresión no válida :(';
    } else {
       $result = eval("return $resultado;");
       $mostrar = $result;
@@ -49,54 +42,56 @@ if ($numero == 'c') {
 } else if ($numero == '←') {
   $_SESSION['numero'] = substr($_SESSION['numero'],0, -1);
 }
+if ($resultado == '-1/-1' || preg_match('~^-\d+\/-\d+$~', $resultado)) {
+  $mostrar = 1;
+}
 
 $_SESSION['resultado'] = $mostrar;
 
 ?>
   <main>
+    <form method="POST">
+      <div class="base">
+        <div class="row">
+          <div class="seccion">
+          <input type="text" name="resultado" class="rta" value="<?= $mostrar ?>"placeholder="0">
+          </div>
+          <div class="col-1 colum">
+            <button type="submit" name="numero" value="1">1</button>
+            <button type="submit" name="numero" value="4">4</button>
+            <button type="submit" name="numero" value="1">1</button>
+            <button type="submit" name="numero" value="0">0</button>
+          </div>
+          <div class="col-1 colum">
+            <button type="submit" name="numero" value="8">8</button>
+            <button type="submit" name="numero" value="5">5</button>
+            <button type="submit" name="numero" value="2">2</button>
+            <button class="c" type="submit" name="numero" value="c">C</button>
+          </div>
+          <div class="col-1 colum">
+            <button type="submit" name="numero" value="9">9</button>
+            <button type="submit" name="numero" value="6">6</button>
+            <button type="submit" name="numero" value="3">3</button>
+            <button type="submit" name="numero" value="*">*</button>
 
-<form method="POST">
-  <div class="base">
-    <div class="row">
-      <div class="seccion">
-      <input type="text" name="resultado" id="mostrar" class="rta" value="<?= $mostrar ?>"placeholder="0">
-      </div>
-      <div class="col-1 colum">
-         <button type="submit" name="numero" value="1">1</button>
-         <button type="submit" name="numero" value="4">4</button>
-         <button type="submit" name="numero" value="1">1</button>
-         <button type="submit" name="numero" value="0">0</button>
-      </div>
-      <div class="col-1 colum">
-         <button type="submit" name="numero" value="8">8</button>
-         <button type="submit" name="numero" value="5">5</button>
-         <button type="submit" name="numero" value="2">2</button>
-         <button class="c" type="submit" name="numero" value="c">C</button>
-      </div>
-      <div class="col-1 colum">
-         <button type="submit" name="numero" value="9">9</button>
-         <button type="submit" name="numero" value="6">6</button>
-         <button type="submit" name="numero" value="3">3</button>
-         <button type="submit" name="numero" value="*">*</button>
+          </div>
+          <div class="col-1 colum">
+            <button type="submit" name="numero" value="+">+</button>
+            <button type="submit" name="numero" value="-">-</button>
+            <button type="submit" name="numero" value="/">/</button>
+            <button class="igual" type="submit" name="numero" value="=">=</button>
+          </div>
+          <div class="col-1 colum" style="background-color: dimgrey;
+        border-radius: 13px;
+        height: 19vh;
+        padding-top: 3vh;">
+            <button class="retroceso" type="submit" name="numero" value="←">←</button>
+          </div>
 
-      </div>
-      <div class="col-1 colum">
-         <button type="submit" name="numero" value="+">+</button>
-         <button type="submit" name="numero" value="-">-</button>
-         <button type="submit" name="numero" value="/">/</button>
-         <button class="igual" type="submit" name="numero" value="=">=</button>
-      </div>
-      <div class="col-1 colum" style="background-color: dimgrey;
-    border-radius: 13px;
-    height: 19vh;
-    padding-top: 3vh;">
-         <button class="retroceso" type="submit" name="numero" value="←">←</button>
-      </div>
-
+        </div>
     </div>
-</div>
-</form>
-<div class="pixel"></div>
+    </form>
+    <div class="pixel"></div>
   </main>
   <footer>
     <!-- place footer here -->
