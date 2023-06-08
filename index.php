@@ -24,29 +24,31 @@ setcookie("jose","es");
     <!-- place navbar here -->
   </header>
   <?php
-    session_start();
-    if (isset($_POST['numero'])) {
-        if($_POST['numero'] == "c"){
-            $_SESSION['num1'] = null;
-        }else if($_POST['numero'] == "←"){
-            $_SESSION['num1'] = substr($_SESSION['num1'],0, -1);
-            // $_SESSION['num1'] = substr($_SESSION['num1'], 0, strlen($_SESSION['num1']) - 1);
-        }else{
-            if (isset($_SESSION['num1'])) {
-                $_SESSION['num1'] .= $_POST['numero'];
-            } else {
-                $_SESSION['num1'] =  $_POST['numero'];
-            }
-        }
-    }
-// if($_POST["numero"]=="="){
-//       echo $_POST["num1"] + $_POST["numero"];
-//   }
-//   else{
+$borones = [1, 2, 3, '+', 4, 5, 6, '-', 7, 8, 9, '*', 'c', 0, '/', '=','←'];
+$numero = '';
+if (isset($_POST['numero']) && in_array($_POST['numero'], $borones)) {
+   $numero = $_POST['numero'];
+}
+$resultado = '';
 
-//   }
+if (isset($_POST['resultado']) && preg_match('~^(?:[\d.]+[*/+-]?)+$~', $_POST['resultado'], $salida)) {
+   $resultado = $salida[0];
+}
 
-
+$display = $resultado . $numero;
+if ($numero == 'c') {
+   $display = '';
+} elseif ($numero == '=' && preg_match('~^\d*\.?\d+(?:[*/+-]\d*\.?\d+)*$~', $resultado)) {
+   if (preg_match('~\/0~',$resultado)) {
+      $display = 'Expresion no valida';
+   } else{
+      $result=eval("return $resultado;");
+      $display = $result;
+   }
+}
+if($_POST['numero'] == "←"){
+  $_SESSION[$resultado ] = substr($_SESSION[$resultado ],0, -1);
+}
 ?>
   <main>
 
@@ -54,7 +56,7 @@ setcookie("jose","es");
   <div class="base">
     <div class="row">
       <div class="seccion">
-      <input type="text" name="resultado" placeholder="ingrese operacion" value="<?php echo isset($_SESSION['num1']) ? $_SESSION['num1'] :0;?>">
+      <input type="text" name="resultado" id="display" class="rta" value="<?= $display ?>"placeholder="0">
       </div>
       <div class="col-1 colum">
          <button type="submit" name="numero" value="1">1</button>
@@ -81,12 +83,13 @@ setcookie("jose","es");
          <button type="submit" name="numero" value="/">/</button>
          <button class="igual" type="submit" name="numero" value="=">=</button>
       </div>
-      <div class="col-1 colum">
-         <button type="submit" name="numero" value="←">←</button>
+      <div class="col-1 colum" style="background-color: dimgrey;
+    border-radius: 13px;
+    height: 19vh;
+    padding-top: 3vh;">
+         <button class="retroceso" type="submit" name="numero" value="←">←</button>
       </div>
-      <div class="enviar">
-      <input type="submit"value="Enviar">
-      </div>
+
     </div>
 </div>
 </form>
