@@ -24,31 +24,34 @@ setcookie("jose","es");
     <!-- place navbar here -->
   </header>
   <?php
-$borones = [1, 2, 3, '+', 4, 5, 6, '-', 7, 8, 9, '*', 'c', 0, '/', '=','←'];
+session_start();
+
+$botones = [1, 2, 3, '+', 4, 5, 6, '-', 7, 8, 9, '*', 'c', 0, '/', '=', '←'];
 $numero = '';
-if (isset($_POST['numero']) && in_array($_POST['numero'], $borones)) {
+if (isset($_POST['numero']) && in_array($_POST['numero'], $botones)) {
    $numero = $_POST['numero'];
 }
-$resultado = '';
 
-if (isset($_POST['resultado']) && preg_match('~^(?:[\d.]+[*/+-]?)+$~', $_POST['resultado'], $salida)) {
-   $resultado = $salida[0];
-}
+$resultado = isset($_SESSION['resultado']) ? $_SESSION['resultado'] : '';
 
-$display = $resultado . $numero;
+$mostrar = $resultado . $numero;
 if ($numero == 'c') {
-   $display = '';
+   $mostrar = '';
+   $_SESSION['resultado'] = '';
 } elseif ($numero == '=' && preg_match('~^\d*\.?\d+(?:[*/+-]\d*\.?\d+)*$~', $resultado)) {
-   if (preg_match('~\/0~',$resultado)) {
-      $display = 'Expresion no valida';
-   } else{
-      $result=eval("return $resultado;");
-      $display = $result;
+   if (preg_match('~\/0~', $resultado)) {
+      $mostrar = 'Expresión no válida';
+   } else {
+      $result = eval("return $resultado;");
+      $mostrar = $result;
+      $_SESSION['resultado'] = $result;
    }
+} else if ($numero == '←') {
+  $_SESSION['numero'] = substr($_SESSION['numero'],0, -1);
 }
-if($_POST['numero'] == "←"){
-  $_SESSION[$resultado ] = substr($_SESSION[$resultado ],0, -1);
-}
+
+$_SESSION['resultado'] = $mostrar;
+
 ?>
   <main>
 
@@ -56,7 +59,7 @@ if($_POST['numero'] == "←"){
   <div class="base">
     <div class="row">
       <div class="seccion">
-      <input type="text" name="resultado" id="display" class="rta" value="<?= $display ?>"placeholder="0">
+      <input type="text" name="resultado" id="mostrar" class="rta" value="<?= $mostrar ?>"placeholder="0">
       </div>
       <div class="col-1 colum">
          <button type="submit" name="numero" value="1">1</button>
